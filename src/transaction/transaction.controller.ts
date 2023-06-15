@@ -7,14 +7,20 @@ import {
     Delete,
     Param,
     HttpException,
+    UseGuards,
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { User } from '@prisma/client';
+import { JwtGuard } from '../auth/guard';
+import { GetUser } from 'src/auth/decorator';
+import { CreateTransactionDto } from './dto/create-transaction-dto';
+import { UpdateTransactionDto } from './dto/update-transaction-dto';
 
 @Controller('transaction')
 export class TransactionController {
     constructor(private transactionService: TransactionService) {}
     // Get all transaction
+    @UseGuards(JwtGuard)
     @Get()
     async getAllTransaction() {
         const result = await this.transactionService.getAllTransaction();
@@ -28,6 +34,7 @@ export class TransactionController {
     }
 
     // Get transaction by id
+    @UseGuards(JwtGuard)
     @Get(':id')
     async getTransactionById(@Param('id') id: string) {
         const result = await this.transactionService.getTransactionById(
@@ -43,16 +50,12 @@ export class TransactionController {
     }
 
     // Create new transaction
+    @UseGuards(JwtGuard)
     @Post()
-    async createTransaction(@Body() dto: any) {
-        const user: User = {
-            id: 1,
-            email: 'test',
-            password: 'test',
-            nama: 'test',
-            coins: 0,
-            register_date: new Date(),
-        };
+    async createTransaction(
+        @Body() dto: CreateTransactionDto,
+        @GetUser() user: User,
+    ) {
         const result = await this.transactionService.createTransaction(
             dto,
             user,
@@ -67,8 +70,12 @@ export class TransactionController {
     }
 
     // Update transaction by id
+    @UseGuards(JwtGuard)
     @Put(':id')
-    async updateTransaction(@Body() dto: any, @Param('id') id: string) {
+    async updateTransaction(
+        @Body() dto: UpdateTransactionDto,
+        @Param('id') id: string,
+    ) {
         const result = await this.transactionService.updateTransaction(
             dto,
             parseInt(id, 10),
@@ -83,6 +90,7 @@ export class TransactionController {
     }
 
     // Delete transaction by id
+    @UseGuards(JwtGuard)
     @Delete(':id')
     async deleteTransaction(@Param('id') id: string) {
         const result = await this.transactionService.deleteTransaction(
