@@ -26,12 +26,25 @@ model User {
 model Transaction {
   id        Int      @id @default(autoincrement())
   date  DateTime @default(now())
-  amount Int
-  tipe_sampah String
+  weight Int
+  tipe_sampah MaterialType
   keterangan String?
+  lokasi String
+  type TranscationType
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
   @@map("transactions")
+}
+
+enum TranscationType {
+  REQUEST
+  DROPOFF
+}
+
+enum MaterialType {
+  ORGANIC
+  RECYCLE
+  HAZARDOUS
 }
