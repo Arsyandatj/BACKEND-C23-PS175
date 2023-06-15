@@ -15,7 +15,7 @@ model User {
   nama  String
   email String @unique
   password String
-  coins Int @default(0)
+  coins Int
   register_date DateTime @default(now())
 
   transactions Transaction[]

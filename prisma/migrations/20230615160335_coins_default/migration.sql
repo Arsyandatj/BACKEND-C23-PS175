@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "coins" DROP NOT NULL,
+ALTER COLUMN "coins" DROP DEFAULT;
